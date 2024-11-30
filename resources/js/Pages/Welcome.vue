@@ -35,7 +35,7 @@
       <div class="login-box p-4 shadow-lg rounded w-100">
         <form>
           <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
+            <label for="username" class="form-label">Merchant Username</label>
             <input type="text" class="form-control" id="username" name="username" />
           </div>
           <div class="mb-3">
