@@ -1,0 +1,29 @@
+services:
+  webserver:
+    build: ./php
+    ports:
+      - "80:80"
+      - "443:443"
+      - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+    volumes:
+      - ../:/var/www/html
+    environment:
+      - ENVIRONMENT=local
+      - DOMAIN=localhost
+      - SSL_CERT_FILE=/etc/ssl/certs/selfsigned.crt
+      - SSL_CERT_KEY_FILE=/etc/ssl/private/selfsigned.key
+    links:
+      - mariadb
+
+  mariadb:
+    build: ./mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mariadb/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=$@#%FJWEOJ
+      - MYSQL_DATABASE=tindahan
+      - MARIADB_AUTO_UPGRADE="false"
+    security_opt:
+      - seccomp:unconfined
