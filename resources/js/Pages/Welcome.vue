@@ -3,19 +3,47 @@
     <!-- Left Column (Login Form) -->
     <div
       class="login-container col-12 col-md-6 d-flex justify-content-center flex-column align-items-center"
-    >      
+    >
       <div class="login-box p-4 shadow-lg rounded w-100">
-        <form>
+        <form @submit.prevent="login">
           <div class="mb-3">
             <label for="username" class="form-label">Merchant Username</label>
-            <input type="text" class="form-control" id="username" name="username" />
+            <input
+              v-model="email"
+              type="text"
+              :class="{ 'form-control': true, 'is-invalid': errors.email }"
+            />
+            <div class="invalid-feedback">
+              {{ errors.email }}
+            </div>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" />
+            <input
+              v-model="password"
+              type="password"
+              :class="{ 'form-control': true, 'is-invalid': errors.password }"
+            />
+
+            <div class="invalid-feedback">
+              {{ errors.password }}
+            </div>
           </div>
 
-          <button type="submit" class="btn btn-primary">Log In</button>
+          <button
+            type="submit"
+            :class="isProcessing ? 'btn btn-primary disabled' : 'btn btn-primary'"
+            :disabled="isProcessing"
+          >
+            <div
+              v-if="isProcessing"
+              class="spinner-border spinner-border-sm me-2 mt-1"
+              role="status"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            {{ isProcessing ? "Please Wait..." : "Log In" }}
+          </button>
 
           <div class="mt-3 form-check">
             <input type="checkbox" class="form-check-input" id="rememberMe" />
@@ -38,7 +66,7 @@
         <div class="container mt-5">
           <div class="row align-items-center">
             <!-- SVG Column -->
-            <div class="col-auto" style="margin-left:-30px;">
+            <div class="col-auto" style="margin-left: -30px">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100">
                 <!-- Cloud Body -->
                 <circle cx="60" cy="80" r="30" fill="#00A1E0" />
@@ -66,7 +94,7 @@
               </svg>
             </div>
             <!-- Text Column -->
-            <div class="col-auto" style="margin-left:-15px;">
+            <div class="col-auto" style="margin-left: -15px">
               <h1>Tindahan</h1>
             </div>
           </div>
@@ -88,6 +116,8 @@
 </template>
 
 <script>
+import { reactive, ref } from "vue";
+
 export default {
   props: {
     canLogin: {
@@ -104,6 +134,56 @@ export default {
       type: String,
       required: true,
     },
+  },
+
+  setup() {
+    const email = ref("");
+    const password = ref("");
+    const errors = reactive({});
+    const isProcessing = ref(false);
+
+    const clearErrors = () => {
+      isProcessing.value = true;
+      Object.keys(errors).forEach((key) => {
+        errors[key] = ""; // Reset each error message to an empty string
+      });
+    };
+
+    const login = async () => {
+      clearErrors();
+      try {
+        // Make a POST request to the login route
+        const response = await axios.post("/login", {
+          email: email.value,
+          password: password.value,
+        });
+
+        window.location.href = "/dashboard"; // Redirect to a protected page
+      } catch (err) {
+        // Handle error (invalid credentials, etc.)
+        // error.value = err.errors || 'Login failed!';
+
+        if (err.response?.data?.errors) {
+          const responseErrors = err.response.data.errors;
+          Object.keys(responseErrors).forEach((field) => {
+            errors[field] = responseErrors[field][0]; // Take the first error message
+          });
+        } else {
+          alert("An unexpected error occurred.");
+        }
+
+        // allows ready for re-processing again
+        isProcessing.value = false;
+      }
+    };
+
+    return {
+      isProcessing,
+      email,
+      password,
+      errors,
+      login,
+    };
   },
 };
 </script>
