@@ -45,17 +45,16 @@
 }
 
 .container-right {
-    background: url("https://via.placeholder.com/600x600") no-repeat center center;
+    background: url("https://picsum.photos/id/765/900?blur=2") no-repeat center center;
     background-size: cover;
     height: 100%;
+    
 }
+
 
 .container-right .promo-text {
     color: white;
-    padding: 40px;
-    bottom: 30px;
-    left: 50px;
-    width: 600px;
+    padding: 100px;
 }
 
 label {
