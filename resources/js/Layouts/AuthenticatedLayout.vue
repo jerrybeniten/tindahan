@@ -66,12 +66,12 @@
       <aside class="sidebar bg-light border-end" style="width: 250px; overflow-y: auto">
         <ul class="nav flex-column p-3">
           <li class="nav-item">
-            <a href="#" class="nav-link text-dark">
-              <i class="fas fa-chart-line"></i> Dashboard</a
+            <a class="nav-link text-dark" :href="route('dashboard')"
+              ><i class="fas fa-chart-line"></i> Dashboard</a
             >
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link text-dark">
+            <a class="nav-link text-dark" :href="route('storeManagement.index')">
               <i class="fas fa-store"></i> Store Management</a
             >
           </li>
