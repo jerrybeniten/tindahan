@@ -161,7 +161,7 @@ export default {
     };
 
     // Use this loader when there is axios process for dashboard
-    isLoading.value = false;
+    isLoading.value = true;
 
     return {
       isLoading,
