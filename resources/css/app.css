@@ -1,3 +1,16 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
+label {
+    font-size: 12px !important;
+    color: rgb(84, 105, 141);
+    margin: 0px 0px 8px;
+    line-height: inherit;
+}
 
+.btn {
+    font-size: 12px !important;
+}
+
+.btn-primary {
+    background-color: rgb(0, 112, 210) !important;
+}
