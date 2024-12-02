@@ -22,5 +22,6 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 
-.docker-tindahan.com/mariadb/db/
+.docker-tindahan.com/mariadb/db
+.docker-tindahan.com/mariadb/db/ib_logfile0
 public/build

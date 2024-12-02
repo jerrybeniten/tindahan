@@ -1,4 +1,6 @@
 import '../css/app.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Bootstrap JS with Popper.js
 import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/vue3';

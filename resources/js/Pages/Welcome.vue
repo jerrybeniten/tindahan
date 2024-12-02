@@ -187,4 +187,79 @@ export default {
   },
 };
 </script>
-1
+
+<style lang="css" scoped>
+.body {
+  background-color: #f4f6f9;
+}
+
+.container-fluid {
+  height: 100vh;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  width: 150px;
+}
+
+.form-control {
+  height: 50px;
+}
+
+.btn-primary {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 12px;
+}
+
+.forgot-password,
+.try-free {
+  font-size: 0.875rem;
+}
+
+.container-right {
+  background: url("https://picsum.photos/id/765/900?blur=2") no-repeat center center;
+  background-size: cover;
+  height: 100%;
+}
+
+.container-right .promo-text {
+  color: white;
+  padding: 100px;
+}
+
+label {
+  font-size: 12px;
+  color: rgb(84, 105, 141);
+  margin: 0px 0px 8px;
+  line-height: inherit;
+}
+
+.btn {
+  font-size: 12px;
+}
+
+.btn-primary {
+  background-color: rgb(0, 112, 210);
+}
+
+a {
+  text-decoration: none;
+  color: #0070d2;
+}
+</style>
