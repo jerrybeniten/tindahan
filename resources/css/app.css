@@ -14,3 +14,25 @@ label {
 .btn-primary {
     background-color: rgb(0, 112, 210) !important;
 }
+
+.modal-body-success {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.success-icon {
+    color: green;
+    font-size: 80px;
+    /* Adjust size as needed */
+    margin-bottom: 10px;
+}
+
+.success-text {
+    font-size: 24px;
+    /* Text size */
+    font-weight: bold;
+    color: green;
+}

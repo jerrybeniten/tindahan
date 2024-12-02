@@ -10,6 +10,7 @@
               class="btn btn-primary"
               data-bs-toggle="modal"
               data-bs-target="#createStore"
+              @click.prevent="createStore"
             >
               <i class="fas fa-plus"></i> Create Store
             </button>
@@ -78,7 +79,7 @@
                 aria-label="Close"
               ></button>
             </div>
-            <form @submit.prevent="submitStore">
+            <form v-if="!isSuccessfull" @submit.prevent="submitStore">
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="name" class="col-form-label">Store Name:</label>
@@ -94,8 +95,8 @@
                 </div>
                 <div class="mb-3">
                   <label for="message-text" class="col-form-label">Description:</label>
-                  <textarea 
-                    v-model="description" 
+                  <textarea
+                    v-model="description"
                     class="form-control"
                     :class="{ 'form-control': true, 'is-invalid': errors.description }"
                   >
@@ -118,13 +119,23 @@
                     v-if="isProcessing"
                     class="spinner-border spinner-border-sm me-2 mt-1"
                     role="status"
-                  >
-                    <span class="visually-hidden">Submitting...</span>
-                  </div>
-                  {{ isProcessing ? "Submitting..." : "Submit" }}
+                  ></div>
+                  {{ isProcessing ? "Please Wait..." : "Submit" }}
                 </button>
               </div>
             </form>
+            <div v-else>
+              <div class="modal-body text-center">
+                <i class="fa-solid fa-check success-icon"></i>
+                <p class="success-text">Successful</p>
+              </div>
+              <!-- Success Notice -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -141,6 +152,14 @@ const name = ref("");
 const description = ref("");
 const errors = reactive({});
 const isProcessing = ref(false);
+const isSuccessfull = ref(false);
+
+const createStore = () => {
+  isProcessing.value = false;
+  isSuccessfull.value = false;
+  name.value = "";
+  description.value = "";
+};
 
 const clearErrors = () => {
   isProcessing.value = true;
@@ -157,6 +176,10 @@ const submitStore = async () => {
       name: name.value,
       description: description.value,
     });
+
+    if (response.status === 200) {
+      isSuccessfull.value = true;
+    }
   } catch (err) {
     // Handle error (invalid credentials, etc.)
     // error.value = err.errors || 'Login failed!';
