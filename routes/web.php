@@ -27,6 +27,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     // Store Management
     Route::post('/store-management/store', [StoreManagementController::class, 'store'])->name('storeManagement.store');
+    Route::get('/store-management/get-stores', [StoreManagementController::class, 'getStores'])->name('storeManagement.getStores');
     Route::get('/store-management', [StoreManagementController::class, 'index'])->name('storeManagement.index');
 
     // Profile

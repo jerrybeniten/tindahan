@@ -21,42 +21,80 @@
       <hr />
 
       <!-- Table Section -->
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
+      <div class="mt-4 justify-left">
+        <div class="mb-3">
+          <input
+            type="text"
+            v-model="search"
+            class="form-control"
+            placeholder="Search stores by name or description..."
+            @input="fetchStores(1)"        
+          />
+        </div>
+        <table class="table table-bordered table-hover table-striped">
           <thead>
             <tr>
-              <th>Store Name</th>
-              <th>Locations</th>
-              <th># of System Users</th>
+              <th @click="setSort('id')" class="sortable">
+                ID
+                <span v-if="sortBy == 'id'">
+                  <i :class="sortOrderIcon"></i>
+                </span>
+              </th>
+              <th @click="setSort('name')" class="sortable">
+                Name
+                <span v-if="sortBy == 'name'">
+                  <i :class="sortOrderIcon"></i>
+                </span>
+              </th>
+              <th @click="setSort('description')" class="sortable">
+                Description
+                <span v-if="sortBy == 'description'">
+                  <i :class="sortOrderIcon"></i>
+                </span>
+              </th>
+              <th @click="setSort('created_at')" class="sortable">Created At</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Shanghai</td>
-              <td>7</td>
-              <td>0</td>
-              <td>0%</td>
-              <td>244</td>
-              <td>₱0.00</td>
-            </tr>
-            <tr>
-              <td>Manila</td>
-              <td>5</td>
-              <td>1</td>
-              <td>20%</td>
-              <td>100</td>
-              <td>₱500.00</td>
-            </tr>
-            <tr>
-              <td>Taguig</td>
-              <td>3</td>
-              <td>1</td>
-              <td>30%</td>
-              <td>50</td>
-              <td>₱200.00</td>
+            <tr v-for="store in stores.data" :key="store.id">
+              <td>{{ store.id }}</td>
+              <td>
+                <a href="#">{{ store.name }}</a>
+              </td>
+              <td>{{ store.description }}</td>
+              <td>{{ store.created_at }}</td>
+              <td></td>
             </tr>
           </tbody>
         </table>
+        <nav>
+          <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{ disabled: pagination.current === 1 }">
+              <button class="page-link" @click="fetchStores(pagination.current - 1)">
+                Previous
+              </button>
+            </li>
+            <li
+              class="page-item"
+              v-for="page in pagination.pages"
+              :key="page"
+              :class="{ active: pagination.current === page }"
+            >
+              <button class="page-link" @click="fetchStores(page)">
+                {{ page }}
+              </button>
+            </li>
+            <li
+              class="page-item"
+              :class="{ disabled: pagination.current === pagination.pages.length }"
+            >
+              <button class="page-link" @click="fetchStores(pagination.current + 1)">
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
 
       <div
@@ -146,7 +184,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { reactive, ref } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 
 const name = ref("");
 const description = ref("");
@@ -197,4 +235,68 @@ const submitStore = async () => {
     isProcessing.value = false;
   }
 };
+
+// getStores
+// State variables
+const stores = reactive({
+  data: [],
+  current_page: 1,
+  last_page: 1,
+});
+
+const sortBy = ref("id");
+const sortOrder = ref("asc");
+const search = ref("");
+
+const pagination = reactive({
+  current: 1,
+  pages: [],
+});
+
+// Fetch stores from the backend
+const fetchStores = async (page = 1) => {
+  try {
+    const response = await axios.get("/store-management/get-stores", {
+      params: {
+        page,
+        sort_by: sortBy.value,
+        sort_order: sortOrder.value,
+        search: search.value
+      },
+    });
+
+    // Update reactive objects
+    stores.data = response.data.data;
+    stores.current_page = response.data.current_page;
+    stores.last_page = response.data.last_page;
+
+    pagination.current = response.data.current_page;
+    pagination.pages = Array.from({ length: response.data.last_page }, (_, i) => i + 1);
+  } catch (error) {
+    console.error("Error fetching stores:", error);
+  }
+};
+
+// Set sorting for columns
+const setSort = (column) => {
+  if (sortBy.value === column) {
+    sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+  } else {
+    sortBy.value = column;
+    sortOrder.value = "asc";
+  }
+  fetchStores(pagination.current);
+};
+
+// Compute the sort order icon
+const sortOrderIcon = computed(() =>
+  sortOrder.value === "asc"
+    ? "fas fa-arrow-up-wide-short"
+    : "fas fa-arrow-down-wide-short"
+);
+
+// Fetch data on mount
+onMounted(() => {
+  fetchStores();
+});
 </script>
