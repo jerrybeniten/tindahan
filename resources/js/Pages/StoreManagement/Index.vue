@@ -69,7 +69,7 @@
           </tbody>
         </table>
         <nav>
-          <ul class="pagination justify-content-center">
+          <ul class="pagination justify-content-start">
             <li class="page-item" :class="{ disabled: pagination.current === 1 }">
               <button class="page-link" @click="fetchStores(pagination.current - 1)">
                 Previous

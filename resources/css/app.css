@@ -7,6 +7,10 @@ label {
     line-height: inherit;
 }
 
+table {
+    font-size: 14px !important;
+}
+
 .btn {
     font-size: 12px !important;
 }
