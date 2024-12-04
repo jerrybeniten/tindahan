@@ -50,8 +50,6 @@ class StoreManagementController extends Controller
                 ->orWhere('description', 'like', "%$search%");
         }
 
-        $query->orderBy('id', 'DESC');
-
         // Apply sorting
         if ($request->has('sort_by') && $request->has('sort_order')) {
             $query->orderBy($request->get('sort_by'), $request->get('sort_order'));
