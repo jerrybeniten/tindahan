@@ -28,15 +28,15 @@
             v-model="search"
             class="form-control"
             placeholder="Search stores by name or description..."
-            @input="fetchStores(1)"        
+            @input="fetchStores(1)"
           />
         </div>
         <table class="table table-bordered table-hover table-striped">
           <thead>
             <tr>
-              <th @click="setSort('id')" class="sortable">
-                ID
-                <span v-if="sortBy == 'id'">
+              <th @click="setSort('uuid')" class="sortable">
+                UUID
+                <span v-if="sortBy == 'uuid'">
                   <i :class="sortOrderIcon"></i>
                 </span>
               </th>
@@ -57,14 +57,34 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="store in stores.data" :key="store.id">
-              <td>{{ store.id }}</td>
-              <td>
-                <a href="#">{{ store.name }}</a>
-              </td>
+            <tr v-for="store in stores.data" :key="store.uuid">
+              <td>{{ store.uuid.split("-")[0] }}</td>
+              <td>{{ store.name }}</td>
               <td>{{ store.description }}</td>
               <td>{{ store.created_at }}</td>
-              <td></td>
+              <td class="d-flex gap-2">
+                <span
+                  ><a
+                    href="#"
+                    class="text-decoration-none"
+                    @click.prevent="viewStore(store.uuid)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#viewStore"
+                    ><i class="fas fa-regular fa-eye"></i></a
+                ></span>
+                <span
+                  ><a href="#" class="text-decoration-none"
+                    ><i class="fas fa-regular fa-pen-to-square"></i></a
+                ></span>
+                <span
+                  ><a href="#" class="text-decoration-none"
+                    ><i class="fas fa-regular fa-trash-can"></i></a
+                ></span>
+                <span
+                  ><a href="#" class="text-decoration-none"
+                    ><i class="fas fa-regular fa-circle-stop"></i></a
+                ></span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -99,10 +119,51 @@
 
       <div
         class="modal fade"
+        id="viewStore"
+        tabindex="-1"
+        aria-labelledby="viewStoreModalLabel"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="viewStoreModalLabel">
+                <i class="fas fa-regular fa-eye"></i> View Store
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div>
+              <div class="modal-body">
+                <p>
+                  <strong>UUID:</strong> <span> {{ viewData.value?.uuid }} </span>
+                </p>
+                <p>
+                  <strong>Store Name:</strong> <span> {{ viewData.value?.name }} </span>
+                </p>
+                <p>
+                  <strong>Description:</strong> <span> {{ viewData.value?.description }} </span>
+                </p>
+              </div>
+              <!-- Success Notice -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
         id="createStore"
         tabindex="-1"
         aria-labelledby="createStoreModalLabel"
-        aria-hidden="true"
       >
         <div class="modal-dialog">
           <div class="modal-content">
@@ -192,6 +253,8 @@ const errors = reactive({});
 const isProcessing = ref(false);
 const isSuccessfull = ref(false);
 
+const viewData = reactive({});
+
 const createStore = () => {
   isProcessing.value = false;
   isSuccessfull.value = false;
@@ -217,6 +280,7 @@ const submitStore = async () => {
 
     if (response.status === 200) {
       isSuccessfull.value = true;
+      fetchStores();
     }
   } catch (err) {
     // Handle error (invalid credentials, etc.)
@@ -233,6 +297,26 @@ const submitStore = async () => {
 
     // allows ready for re-processing again
     isProcessing.value = false;
+  }
+};
+
+const viewStore = async (uuid) => {
+  try {
+    // Make a POST request to the login route
+    const response = await axios.post("/store-management/view-store", {
+      uuid,
+    });
+
+    if (response.status === 200) {
+      viewData.value = response.data;
+    }
+  } catch (err) {
+    // Handle error (invalid credentials, etc.)
+    // error.value = err.errors || 'Login failed!';
+    if (err.response?.data?.errors) {
+    } else {
+      alert("An unexpected error occurred.");
+    }
   }
 };
 
@@ -261,7 +345,7 @@ const fetchStores = async (page = 1) => {
         page,
         sort_by: sortBy.value,
         sort_order: sortOrder.value,
-        search: search.value
+        search: search.value,
       },
     });
 

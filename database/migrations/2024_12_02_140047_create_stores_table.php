@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->nullable(false);
             $table->string('name')->nullable(false);
             $table->string('description')->nullable(false);
             $table->unsignedBigInteger('created_by_user_id')->nullable(false);

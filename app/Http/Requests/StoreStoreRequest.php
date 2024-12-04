@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
 class StoreStoreRequest extends FormRequest
@@ -43,11 +44,14 @@ class StoreStoreRequest extends FormRequest
         ];
     }
 
-    public function prepareForValidation()
+    public function prepareForValidation(): void
     {
+        $uuid = Str::uuid();
+
         // Automatically set the created_by_user_id as the authenticated user's ID
         $this->merge([
-            'created_by_user_id' => Auth::id(),
+            'uuid' => $uuid,
+            'created_by_user_id' => Auth::id(),            
         ]);
     }
 }

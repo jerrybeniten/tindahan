@@ -45,4 +45,11 @@ class StoreManagementController extends Controller
         $stores = $query->paginate(10);
         return response()->json($stores);
     }
+
+    public function viewStore(Request $request): JsonResponse
+    {
+        $uuid = $request->get('uuid');
+        $data = Store::where('uuid', $uuid)->first();
+        return response()->json($data);
+    }
 }
