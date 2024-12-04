@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStoreRequest;
+use App\Http\Requests\UpdateStoreRequest;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
@@ -25,6 +26,19 @@ class StoreManagementController extends Controller
         return Inertia::render('StoreManagement/Index');
     }
 
+    public function updateStore(UpdateStoreRequest $request): void
+    {
+        $uuid = $request->get('uuid');
+        $name = $request->get('name');
+        $description = $request->get('description');
+
+        Store::where('uuid', $uuid)
+            ->update([
+                'name' => $name,
+                'description' => $description
+            ]);
+    }
+
     public function getStores(Request $request): JsonResponse
     {
         $query = Store::query();
@@ -35,6 +49,8 @@ class StoreManagementController extends Controller
             $query->where('name', 'like', "%$search%")
                 ->orWhere('description', 'like', "%$search%");
         }
+
+        $query->orderBy('id', 'DESC');
 
         // Apply sorting
         if ($request->has('sort_by') && $request->has('sort_order')) {

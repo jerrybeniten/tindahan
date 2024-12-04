@@ -73,7 +73,12 @@
                     ><i class="fas fa-regular fa-eye"></i></a
                 ></span>
                 <span
-                  ><a href="#" class="text-decoration-none"
+                  ><a
+                    href="#"
+                    class="text-decoration-none"
+                    data-bs-toggle="modal"
+                    data-bs-target="#updateStore"
+                    @click.prevent="viewStore(store.uuid)"
                     ><i class="fas fa-regular fa-pen-to-square"></i></a
                 ></span>
                 <span
@@ -145,7 +150,8 @@
                   <strong>Store Name:</strong> <span> {{ viewData.value?.name }} </span>
                 </p>
                 <p>
-                  <strong>Description:</strong> <span> {{ viewData.value?.description }} </span>
+                  <strong>Description:</strong>
+                  <span> {{ viewData.value?.description }} </span>
                 </p>
               </div>
               <!-- Success Notice -->
@@ -159,6 +165,7 @@
         </div>
       </div>
 
+      <!--create store modal-->
       <div
         class="modal fade"
         id="createStore"
@@ -238,6 +245,94 @@
           </div>
         </div>
       </div>
+
+      <!--update store modal-->
+      <div
+        class="modal fade"
+        id="updateStore"
+        tabindex="-1"
+        aria-labelledby="updateStoreModalLabel"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="updateStoreModalLabel">
+                <i class="fas fa-regular fa-pen-to-square"></i> Update Store
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <form v-if="!isSuccessfull" @submit.prevent="submitUpdateStore">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="name" class="col-form-label">UUID:</label>
+                  <input v-model="uuid" type="text" class="form-control" disabled />
+                  <div class="invalid-feedback">
+                    {{ errors.name }}
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="name" class="col-form-label">Store Name:</label>
+                  <input
+                    v-model="name"
+                    type="text"
+                    class="form-control"
+                    :class="{ 'form-control': true, 'is-invalid': errors.name }"
+                  />
+                  <div class="invalid-feedback">
+                    {{ errors.name }}
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Description:</label>
+                  <textarea
+                    v-model="description"
+                    class="form-control"
+                    :class="{ 'form-control': true, 'is-invalid': errors.description }"
+                  >
+                  </textarea>
+                  <div class="invalid-feedback">
+                    {{ errors.description }}
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  :class="isProcessing ? 'btn btn-primary disabled' : 'btn btn-primary'"
+                  :disabled="isProcessing"
+                >
+                  <div
+                    v-if="isProcessing"
+                    class="spinner-border spinner-border-sm me-2 mt-1"
+                    role="status"
+                  ></div>
+                  {{ isProcessing ? "Please Wait..." : "Update" }}
+                </button>
+              </div>
+            </form>
+            <div v-else>
+              <div class="modal-body text-center">
+                <i class="fa-solid fa-check success-icon"></i>
+                <p class="success-text">Successful</p>
+              </div>
+              <!-- Success Notice -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </AuthenticatedLayout>
 </template>
@@ -249,6 +344,7 @@ import { ref, reactive, computed, onMounted } from "vue";
 
 const name = ref("");
 const description = ref("");
+const uuid = ref("");
 const errors = reactive({});
 const isProcessing = ref(false);
 const isSuccessfull = ref(false);
@@ -300,19 +396,57 @@ const submitStore = async () => {
   }
 };
 
-const viewStore = async (uuid) => {
+const submitUpdateStore = async () => {
+  clearErrors();
   try {
     // Make a POST request to the login route
-    const response = await axios.post("/store-management/view-store", {
-      uuid,
+    const response = await axios.post("/store-management/update-store", {
+      uuid: uuid.value,
+      name: name.value,
+      description: description.value,
     });
 
     if (response.status === 200) {
-      viewData.value = response.data;
+      isSuccessfull.value = true;
+      isProcessing.value = false;
+      fetchStores();
     }
   } catch (err) {
     // Handle error (invalid credentials, etc.)
     // error.value = err.errors || 'Login failed!';
+
+    if (err.response?.data?.errors) {
+      const responseErrors = err.response.data.errors;
+      Object.keys(responseErrors).forEach((field) => {
+        errors[field] = responseErrors[field][0]; // Take the first error message
+      });
+    } else {
+      alert("An unexpected error occurred.");
+    }
+
+    // allows ready for re-processing again
+    isProcessing.value = false;
+  }
+};
+
+const viewStore = async (uuidData) => {
+  isSuccessfull.value = false;
+  try {
+    // Make a POST request to the login route
+    const response = await axios.post("/store-management/view-store", {
+      uuid: uuidData,
+    });
+
+    if (response.status === 200) {
+      viewData.value = response.data;
+      uuid.value = viewData.value?.uuid;
+      name.value = viewData.value?.name;
+      description.value = viewData.value?.description;
+    }
+  } catch (err) {
+    // Handle error (invalid credentials, etc.)
+    // error.value = err.errors || 'Login failed!';
+    console.log(err);
     if (err.response?.data?.errors) {
     } else {
       alert("An unexpected error occurred.");
