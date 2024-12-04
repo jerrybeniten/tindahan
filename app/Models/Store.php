@@ -31,4 +31,12 @@ class Store extends Model
 
         return $diff . ': ' . $dateTime; // Combine them
     }
+
+    /**
+     * Get the user that owns the store.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id');
+    }
 }

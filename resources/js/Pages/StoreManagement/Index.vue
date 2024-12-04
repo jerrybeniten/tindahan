@@ -52,7 +52,8 @@
                   <i :class="sortOrderIcon"></i>
                 </span>
               </th>
-              <th @click="setSort('created_at')" class="sortable">Created At</th>
+              <th>Created By</th>
+              <th>Created At</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -61,6 +62,7 @@
               <td>{{ store.uuid.split("-")[0] }}</td>
               <td>{{ store.name }}</td>
               <td>{{ store.description }}</td>
+              <td>{{ store.user.name }}</td>
               <td>{{ store.created_at }}</td>
               <td class="d-flex gap-2">
                 <span

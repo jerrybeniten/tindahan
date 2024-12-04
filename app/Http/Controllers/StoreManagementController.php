@@ -43,6 +43,8 @@ class StoreManagementController extends Controller
     {
         $query = Store::query();
 
+        $query->with('user');
+
         // Apply search
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
