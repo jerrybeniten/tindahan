@@ -26,19 +26,6 @@ class StoreManagementController extends Controller
         return Inertia::render('StoreManagement/Index');
     }
 
-    public function updateStore(UpdateStoreRequest $request): void
-    {
-        $uuid = $request->get('uuid');
-        $name = $request->get('name');
-        $description = $request->get('description');
-
-        Store::where('uuid', $uuid)
-            ->update([
-                'name' => $name,
-                'description' => $description
-            ]);
-    }
-
     public function getStores(Request $request): JsonResponse
     {
         $query = Store::query();
@@ -67,6 +54,19 @@ class StoreManagementController extends Controller
         $uuid = $request->get('uuid');
         $data = Store::where('uuid', $uuid)->first();
         return response()->json($data);
+    }
+
+    public function updateStore(UpdateStoreRequest $request): void
+    {
+        $uuid = $request->get('uuid');
+        $name = $request->get('name');
+        $description = $request->get('description');
+
+        Store::where('uuid', $uuid)
+            ->update([
+                'name' => $name,
+                'description' => $description
+            ]);
     }
 
     public function deleteStore(Request $request): JsonResponse

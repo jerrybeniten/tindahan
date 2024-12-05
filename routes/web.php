@@ -25,14 +25,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
     // Store Management
+    Route::get('/store-management', [StoreManagementController::class, 'index'])->name('storeManagement.index');
     Route::post('/store-management/store', [StoreManagementController::class, 'store'])->name('storeManagement.store');
-    Route::post('/store-management/update-store', [StoreManagementController::class, 'updateStore'])->name('storeManagement.updateStore');
     Route::get('/store-management/get-stores', [StoreManagementController::class, 'getStores'])->name('storeManagement.getStores');
     Route::post('/store-management/view-store', [StoreManagementController::class, 'viewStore'])->name('storeManagement.viewStore');
+    Route::put('/store-management/update-store', [StoreManagementController::class, 'updateStore'])->name('storeManagement.updateStore');    
     Route::delete('/store-management/delete-store', [StoreManagementController::class, 'deleteStore'])->name('storeManagement.deleteStore');
-    Route::get('/store-management', [StoreManagementController::class, 'index'])->name('storeManagement.index');
-
+    
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

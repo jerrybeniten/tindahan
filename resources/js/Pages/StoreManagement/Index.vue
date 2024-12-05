@@ -370,7 +370,7 @@
                 <i class="fa-solid fa-check success-icon"></i>
                 <p class="success-text">Store has been deleted successfully!</p>
               </div>
-              
+
               <!-- Success Notice -->
               <div class="modal-footer" v-if="!isSuccessfull">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -491,7 +491,7 @@ const submitUpdateStore = async () => {
   clearErrors();
   try {
     // Make a POST request to the login route
-    const response = await axios.post("/store-management/update-store", {
+    const response = await axios.put("/store-management/update-store", {
       uuid: uuid.value,
       name: name.value,
       description: description.value,
