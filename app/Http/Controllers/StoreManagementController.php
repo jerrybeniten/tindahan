@@ -68,4 +68,18 @@ class StoreManagementController extends Controller
         $data = Store::where('uuid', $uuid)->first();
         return response()->json($data);
     }
+
+    public function deleteStore(Request $request): JsonResponse
+    {
+        $uuid = $request->get('uuid');
+
+        $store = Store::where('uuid', $uuid)->first();
+
+        if ($store) {
+            $store->delete(); // Soft deletes the record
+            return response()->json(['message' => 'Store has been deleted.'], 200);
+        } else {
+            return response()->json(['message' => 'Store not found.'], 404);
+        }
+    }
 }

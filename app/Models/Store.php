@@ -5,21 +5,24 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class Store extends Model
 {
 
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;    
 
+    // The attributes that are mass assignable
     protected $fillable = [
         'uuid',
         'name',
         'description',
         'created_by_user_id'
     ];
+
+    // Enable soft delete timestamps
+    protected $dates = ['deleted_at'];
 
     // Accessor to return human-readable date and time
     public function getCreatedAtAttribute($value)

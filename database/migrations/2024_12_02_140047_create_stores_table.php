@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name')->nullable(false);
             $table->string('description')->nullable(false);
             $table->unsignedBigInteger('created_by_user_id')->nullable(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

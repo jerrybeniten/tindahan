@@ -71,7 +71,7 @@
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" :href="route('storeManagement.index')">
+            <a class="nav-link text-dark active" :href="route('storeManagement.index')">
               <i class="fas fa-store"></i> Store Management</a
             >
           </li>
@@ -130,6 +130,11 @@
           <li class="nav-item">
             <a href="#" class="nav-link text-dark">
               <i class="fas fa-gear"></i> Settings</a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-dark">
+              <i class="fas fa-arrow-right-from-bracket"></i> Logout</a
             >
           </li>
         </ul>
@@ -206,6 +211,26 @@ export default {
   z-index: 999;
   animation: loadAnimation 3s ease-out forwards; /* Animation to expand width */
 }
+
+.sidebar .nav-link {
+  color: #000;
+  border-radius: 0; /* Default state with no rounding */
+  border-radius: 0 15px 15px 0; 
+}
+
+.sidebar .nav-link.active {
+  background-color: #007bff;
+  color: #fff !important;
+  border-radius: 0 15px 15px 0; 
+  transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.sidebar .nav-link:hover  {
+  background-color: #72a3d8;  
+  color: #fff !important;
+  border-radius: 0 15px 15px 0; 
+}
+
 
 @keyframes loadAnimation {
   0% {

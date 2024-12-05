@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/store-management/update-store', [StoreManagementController::class, 'updateStore'])->name('storeManagement.updateStore');
     Route::get('/store-management/get-stores', [StoreManagementController::class, 'getStores'])->name('storeManagement.getStores');
     Route::post('/store-management/view-store', [StoreManagementController::class, 'viewStore'])->name('storeManagement.viewStore');
+    Route::delete('/store-management/delete-store', [StoreManagementController::class, 'deleteStore'])->name('storeManagement.deleteStore');
     Route::get('/store-management', [StoreManagementController::class, 'index'])->name('storeManagement.index');
 
     // Profile

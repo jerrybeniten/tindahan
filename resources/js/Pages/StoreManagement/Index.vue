@@ -84,12 +84,17 @@
                     ><i class="fas fa-regular fa-pen-to-square"></i></a
                 ></span>
                 <span
-                  ><a href="#" class="text-decoration-none"
+                  ><a
+                    href="#"
+                    class="text-decoration-none"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteStore"
+                    @click.prevent="viewStore(store.uuid)"
                     ><i class="fas fa-regular fa-trash-can"></i></a
                 ></span>
                 <span
                   ><a href="#" class="text-decoration-none"
-                    ><i class="fas fa-regular fa-circle-stop"></i></a
+                    ><i class="fas fa-regular fa-lock-open"></i></a
                 ></span>
               </td>
             </tr>
@@ -335,6 +340,59 @@
           </div>
         </div>
       </div>
+
+      <!--delete store modal-->
+      <div
+        class="modal fade"
+        id="deleteStore"
+        tabindex="-1"
+        aria-labelledby="deleteStoreModalLabel"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="deleteStoreModalLabel">
+                <i class="fas fa-regular fa-trash-can"></i> Delete Store
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div>
+              <div class="modal-body text-center" v-if="!isSuccessfull">
+                <p>Are you sure you want to delete this store?</p>
+              </div>
+              <div class="modal-body text-center" v-else>
+                <i class="fa-solid fa-check success-icon"></i>
+                <p class="success-text">Store has been deleted successfully!</p>
+              </div>
+              
+              <!-- Success Notice -->
+              <div class="modal-footer" v-if="!isSuccessfull">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  No
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-danger" 
+                  @click.prevent="deleteStore()"
+                >
+                  Yes
+                </button>
+              </div>
+              <div class="modal-footer" v-else>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </AuthenticatedLayout>
 </template>
@@ -378,6 +436,37 @@ const submitStore = async () => {
 
     if (response.status === 200) {
       isSuccessfull.value = true;
+      fetchStores();
+    }
+  } catch (err) {
+    // Handle error (invalid credentials, etc.)
+    // error.value = err.errors || 'Login failed!';
+
+    if (err.response?.data?.errors) {
+      const responseErrors = err.response.data.errors;
+      Object.keys(responseErrors).forEach((field) => {
+        errors[field] = responseErrors[field][0]; // Take the first error message
+      });
+    } else {
+      alert("An unexpected error occurred.");
+    }
+
+    // allows ready for re-processing again
+    isProcessing.value = false;
+  }
+};
+
+const deleteStore = async () => {
+
+  try {
+    // Make a DELETE request
+    const response = await axios.delete("/store-management/delete-store", {
+      data: { uuid: uuid.value }
+    });
+
+    if (response.status === 200) {
+      isSuccessfull.value = true;
+      isProcessing.value = false;
       fetchStores();
     }
   } catch (err) {
