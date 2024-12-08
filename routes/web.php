@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StoreLocationController;
 use App\Http\Controllers\StoreManagementController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/store-management/view-store', [StoreManagementController::class, 'viewStore'])->name('storeManagement.viewStore');
     Route::put('/store-management/update-store', [StoreManagementController::class, 'updateStore'])->name('storeManagement.updateStore');    
     Route::delete('/store-management/delete-store', [StoreManagementController::class, 'deleteStore'])->name('storeManagement.deleteStore');
+    Route::get('/store-management/profile/{uuid}', [StoreManagementController::class, 'profile'])->name('storeManagement.profile');
+
+    // Store Location
+    Route::post('/store-location/store', [StoreLocationController::class, 'store'])->name('storeLocation.store');
+    Route::get('/store-location/get-store-locatons', [StoreLocationController::class, 'getStoreLocations'])->name('storeLocation.getStoreLocation');
     
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

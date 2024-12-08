@@ -82,4 +82,9 @@ class StoreManagementController extends Controller
             return response()->json(['message' => 'Store not found.'], 404);
         }
     }
+
+    public function profile(Request $request, $uuid) {
+        $data = Store::where('uuid', $uuid)->first();
+        return Inertia::render('StoreManagement/Profile', compact('data'));
+    }
 }

@@ -59,7 +59,11 @@
           </thead>
           <tbody>
             <tr v-for="store in stores.data" :key="store.uuid">
-              <td>{{ store.uuid.split("-")[0] }}</td>
+              <td>
+                <a :href="route('storeManagement.profile', { uuid: store.uuid })">
+                  {{ store.uuid.split("-")[0] }}</a
+                >
+              </td>
               <td>{{ store.name }}</td>
               <td>{{ store.description }}</td>
               <td>{{ store.user.name }}</td>
@@ -376,9 +380,9 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                   No
                 </button>
-                <button 
-                  type="button" 
-                  class="btn btn-danger" 
+                <button
+                  type="button"
+                  class="btn btn-danger"
                   @click.prevent="deleteStore()"
                 >
                   Yes
@@ -387,7 +391,7 @@
               <div class="modal-footer" v-else>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                   Close
-                </button>                
+                </button>
               </div>
             </div>
           </div>
@@ -408,7 +412,6 @@ const uuid = ref("");
 const errors = reactive({});
 const isProcessing = ref(false);
 const isSuccessfull = ref(false);
-
 const viewData = reactive({});
 
 const createStore = () => {
@@ -457,11 +460,10 @@ const submitStore = async () => {
 };
 
 const deleteStore = async () => {
-
   try {
     // Make a DELETE request
     const response = await axios.delete("/store-management/delete-store", {
-      data: { uuid: uuid.value }
+      data: { uuid: uuid.value },
     });
 
     if (response.status === 200) {
