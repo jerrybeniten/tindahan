@@ -434,6 +434,13 @@ const isSuccessfull = ref(false);
 
 const viewData = reactive({});
 
+const { data } = defineProps({
+  data: {
+    type: Object,
+    required: true,
+  },
+});
+
 const clearErrors = () => {
   isProcessing.value = true;
   Object.keys(errors).forEach((key) => {
@@ -444,8 +451,10 @@ const clearErrors = () => {
 const submitStoreLocation = async () => {
   clearErrors();
   try {
+
     // Make a POST request to the login route
     const response = await axios.post("/store-location/store", {
+      store_uuid: data.uuid,
       location_name: location_name.value,
       store_code: store_code.value,
       manager_name: manager_name.value,
@@ -550,10 +559,5 @@ onMounted(() => {
   fetchStoreLocations();
 });
 
-defineProps({
-  data: {
-    type: Object,
-    required: true,
-  },
-});
+
 </script>

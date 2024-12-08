@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('store_locations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('store_id');
             $table->uuid('uuid');
             $table->string('location_name'); // Store name
             $table->string('store_code')->unique(); // Unique identifier for the store

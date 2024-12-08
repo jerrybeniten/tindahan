@@ -24,8 +24,9 @@ class StoreLocationController extends Controller
         // Apply search
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $query->where('name', 'like', "%$search%")
-                ->orWhere('description', 'like', "%$search%");
+            $query->where('location_name', 'like', "%$search%")
+                ->orWhere('store_code', 'like', "%$search%")
+                ->orWhere('manager_name', 'like', "%$search%");
         }
 
         // Apply sorting
