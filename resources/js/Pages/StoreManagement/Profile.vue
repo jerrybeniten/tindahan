@@ -43,7 +43,24 @@
                   <i :class="sortOrderIcon"></i>
                 </span>
               </th>
-              <th>Created At</th>
+              <th @click="setSort('location_name')" class="sortable">
+                Location Name
+                <span v-if="sortBy == 'uuid'">
+                  <i :class="sortOrderIcon"></i>
+                </span>
+              </th>
+              <th @click="setSort('store_code')" class="sortable">
+                Store Code
+                <span v-if="sortBy == 'store_code'">
+                  <i :class="sortOrderIcon"></i>
+                </span>
+              </th>
+              <th @click="setSort('manager_name')" class="sortable">
+                Manager's Name
+                <span v-if="sortBy == 'manager_name'">
+                  <i :class="sortOrderIcon"></i>
+                </span>
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -56,6 +73,9 @@
                   {{ storeLocations.uuid.split("-")[0] }}</a
                 >
               </td>
+              <td>{{ storeLocations.location_name }}</td>
+              <td>{{ storeLocations.store_code }}</td>
+              <td>{{ storeLocations.manager_name }}</td>
               <td>
                 <span
                   ><a
@@ -445,7 +465,7 @@ const submitStoreLocation = async () => {
 
     if (response.status === 200) {
       isSuccessfull.value = true;
-      //fetchStores();
+      fetchStoreLocations();
     }
   } catch (err) {
     // Handle error (invalid credentials, etc.)

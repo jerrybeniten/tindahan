@@ -16,7 +16,7 @@ class StoreLocation extends Model
         'uuid',
         'location_name',
         'store_code',
-        'managers_name',
+        'manager_name',
         'email',
         'phone', 
         'address_line1',
