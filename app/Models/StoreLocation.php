@@ -14,11 +14,12 @@ class StoreLocation extends Model
     // The attributes that are mass assignable
     protected $fillable = [
         'uuid',
+        'store_id',
         'location_name',
         'store_code',
         'manager_name',
         'email',
-        'phone', 
+        'phone',
         'address_line1',
         'address_line2',
         'city',
@@ -33,4 +34,9 @@ class StoreLocation extends Model
 
     // Enable soft delete timestamps
     protected $dates = ['deleted_at'];
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id');
+    }
 }

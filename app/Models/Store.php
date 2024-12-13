@@ -42,4 +42,9 @@ class Store extends Model
     {
         return $this->belongsTo(User::class, 'created_by_user_id');
     }
+
+    public function storeLocations()
+    {
+        return $this->hasMany(StoreLocation::class, 'store_id');
+    }
 }

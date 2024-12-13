@@ -76,7 +76,7 @@
               <td>{{ storeLocations.location_name }}</td>
               <td>{{ storeLocations.store_code }}</td>
               <td>{{ storeLocations.manager_name }}</td>
-              <td>
+              <td class="d-flex gap-2">
                 <span
                   ><a
                     href="#"
@@ -521,6 +521,7 @@ const fetchStoreLocations = async (page = 1) => {
         sort_by: sortBy.value,
         sort_order: sortOrder.value,
         search: search.value,
+        store_uuid: data.uuid,
       },
     });
 
