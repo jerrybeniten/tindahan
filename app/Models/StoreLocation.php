@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,6 +35,17 @@ class StoreLocation extends Model
 
     // Enable soft delete timestamps
     protected $dates = ['deleted_at'];
+
+    // Accessor to return human-readable date and time
+    public function getCreatedAtAttribute($value)
+    {
+        $carbonDate = Carbon::parse($value); // Parse only once
+
+        $diff = $carbonDate->diffForHumans(); // Get the relative time
+        $dateTime = $carbonDate->format('l, F j, Y g:i A'); // Get the full date-time
+
+        return $diff . ': ' . $dateTime; // Combine them
+    }
 
     public function store()
     {

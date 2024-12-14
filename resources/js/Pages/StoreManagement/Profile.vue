@@ -81,9 +81,9 @@
                   ><a
                     href="#"
                     class="text-decoration-none"
-                    @click.prevent="viewStore(storeLocations.uuid)"
+                    @click.prevent="viewStoreLocation(storeLocations.uuid)"
                     data-bs-toggle="modal"
-                    data-bs-target="#viewStore"
+                    data-bs-target="#viewStoreLocation"
                     ><i class="fas fa-regular fa-eye"></i></a
                 ></span>
                 <span
@@ -403,6 +403,101 @@
           </div>
         </div>
       </div>
+
+      <!-- viewStoreLocation -->
+      <div
+        class="modal fade"
+        id="viewStoreLocation"
+        tabindex="-1"
+        aria-labelledby="viewStoreLocationModalLabel"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="viewStoreLocationModalLabel">
+                <i class="fas fa-regular fa-eye"></i> View Store Location
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div>
+              <div class="modal-body">
+                <table class="table table-bordered table-hover table-striped">
+                  <thead></thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold">UUID</td>
+                      <td>{{ viewData.value?.uuid }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Location Name</td>
+                      <td>{{ viewData.value?.location_name }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Store Code</td>
+                      <td>{{ viewData.value?.store_code }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Manager's Name</td>
+                      <td>{{ viewData.value?.manager_name }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Email</td>
+                      <td>{{ viewData.value?.email }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Phone</td>
+                      <td>{{ viewData.value?.phone }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Address Line 1</td>
+                      <td>{{ viewData.value?.address_line1 }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Address Line 2</td>
+                      <td>{{ viewData.value?.address_line2 }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">City</td>
+                      <td>{{ viewData.value?.city }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">State</td>
+                      <td>{{ viewData.value?.state }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Zip Code</td>
+                      <td>{{ viewData.value?.zip_code }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Country</td>
+                      <td>{{ viewData.value?.country }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Is Active</td>
+                      <td>{{ viewData.value?.is_active ? "Yes" : "No" }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Created At</td>
+                      <td>{{ viewData.value?.created_at }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Success Notice -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </AuthenticatedLayout>
 </template>
@@ -431,7 +526,6 @@ const opening_hours = ref("");
 const errors = reactive({});
 const isProcessing = ref(false);
 const isSuccessfull = ref(false);
-
 const viewData = reactive({});
 
 const { data } = defineProps({
@@ -451,7 +545,6 @@ const clearErrors = () => {
 const submitStoreLocation = async () => {
   clearErrors();
   try {
-
     // Make a POST request to the login route
     const response = await axios.post("/store-location/store", {
       store_uuid: data.uuid,
@@ -492,6 +585,30 @@ const submitStoreLocation = async () => {
 
     // allows ready for re-processing again
     isProcessing.value = false;
+  }
+};
+
+const viewStoreLocation = async (uuidData) => {
+  isSuccessfull.value = false;
+
+  try {
+    // Make a POST request to the login route
+    const response = await axios.post("/store-location/view-store-locaton", {
+      uuid: uuidData,
+    });
+
+    if (response.status === 200) {
+      viewData.value = response.data;
+      //uuid.value = viewData.value?.uuid;
+    }
+  } catch (err) {
+    // Handle error (invalid credentials, etc.)
+    // error.value = err.errors || 'Login failed!';
+    console.log(err);
+    if (err.response?.data?.errors) {
+    } else {
+      alert("An unexpected error occurred.");
+    }
   }
 };
 
@@ -559,6 +676,4 @@ const sortOrderIcon = computed(() =>
 onMounted(() => {
   fetchStoreLocations();
 });
-
-
 </script>

@@ -38,7 +38,8 @@ Route::middleware('auth')->group(function () {
 
     // Store Location
     Route::post('/store-location/store', [StoreLocationController::class, 'store'])->name('storeLocation.store');
-    Route::get('/store-location/get-store-locatons', [StoreLocationController::class, 'getStoreLocations'])->name('storeLocation.getStoreLocation');
+    Route::get('/store-location/get-store-locatons', [StoreLocationController::class, 'getStoreLocations'])->name('storeLocation.getStoreLocations');
+    Route::post('/store-location/view-store-locaton', [StoreLocationController::class, 'viewStoreLocation'])->name('storeLocation.viewStoreLocation');
     
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

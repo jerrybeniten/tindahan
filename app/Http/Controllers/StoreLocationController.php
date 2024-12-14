@@ -63,6 +63,13 @@ class StoreLocationController extends Controller
         return response()->json($stores);
     }
 
+    public function viewStoreLocation(Request $request): JsonResponse
+    {
+        $uuid = $request->get('uuid');
+        $data = StoreLocation::where('uuid', $uuid)->first();
+        return response()->json($data);
+    }
+
     private function getStoreId($uuid)
     {
         return Store::where('uuid', $uuid)->first();

@@ -406,9 +406,12 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref, reactive, computed, onMounted } from "vue";
 
+// form fields
 const name = ref("");
 const description = ref("");
 const uuid = ref("");
+
+// live status
 const errors = reactive({});
 const isProcessing = ref(false);
 const isSuccessfull = ref(false);
