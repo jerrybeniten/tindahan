@@ -66,12 +66,12 @@
       <aside class="sidebar bg-light border-end" style="width: 250px; overflow-y: auto">
         <ul class="nav flex-column p-3">
           <li class="nav-item">
-            <a class="nav-link text-dark" :href="route('dashboard')"
+            <a class="nav-link text-dark" :class="{ active: isActive('/dashboard') }" :href="route('dashboard')"
               ><i class="fas fa-chart-line"></i> Dashboard</a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark active" :href="route('storeManagement.index')">
+            <a class="nav-link text-dark"  :class="{ active: isActive('/store-management') }" :href="route('storeManagement.index')">
               <i class="fas fa-store"></i> Store Management</a
             >
           </li>
@@ -147,11 +147,17 @@
 </template>
 
 <script>
+
 import { ref, onUnmounted } from "vue";
+
 
 export default {
   name: "AuthenticatedLayout",
-  setup() {
+  setup() {    
+    const isActive = (path) => {            
+      return window.location.pathname == path;
+    }
+
     // Define reactive state using ref
     const collapseState = ref({
       traffic: false, // 'traffic' menu state (collapsed or expanded)
@@ -172,6 +178,7 @@ export default {
       isLoading,
       collapseState,
       toggleCollapse,
+      isActive
     };
   },
 };
