@@ -154,16 +154,23 @@
             </div>
             <div>
               <div class="modal-body">
-                <p>
-                  <strong>UUID:</strong> <span> {{ viewData.value?.uuid }} </span>
-                </p>
-                <p>
-                  <strong>Store Name:</strong> <span> {{ viewData.value?.name }} </span>
-                </p>
-                <p>
-                  <strong>Description:</strong>
-                  <span> {{ viewData.value?.description }} </span>
-                </p>
+                <table class="table table-bordered table-hover table-striped">
+                  <thead></thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold">UUID</td>
+                      <td>{{ viewData.value?.uuid }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Store Name</td>
+                      <td>{{ viewData.value?.name }}</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Description</td>
+                      <td>{{ viewData.value?.description }}</td>
+                    </tr>                    
+                  </tbody>
+                </table>
               </div>
               <!-- Success Notice -->
               <div class="modal-footer">
